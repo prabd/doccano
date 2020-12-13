@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-btn
+      :disabled="!total"
       class="text-capitalize"
       outlined
       @click="dialog=true"
@@ -12,7 +13,6 @@
       width="800"
     >
       <confirm-form
-        :items="items"
         :title="$t('dataset.deleteBulkDocumentsTitle')"
         :message="$t('dataset.deleteBulkDocumentsMessage')"
         :button-true-text="$t('generic.yes')"
@@ -21,13 +21,12 @@
         @ok="deleteAllDocuments($route.params.id);dialog=false"
         @cancel="dialog=false"
       />
-      <!-- TODO: Change above ok function to deleteAll -->
     </v-dialog>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import ConfirmForm from '@/components/organisms/utils/ConfirmForm'
 
 export default {
@@ -42,18 +41,11 @@ export default {
   },
 
   computed: {
-    ...mapState('documents', ['selected', 'items']),
-    ...mapGetters('documents', ['isDocumentSelected'])
+    ...mapState('documents', ['total'])
   },
 
   methods: {
-    // TODO: Make sure to get delete All function here
-    ...mapActions('documents', ['deleteAllDocuments']),
-
-    handleDeleteDocument() {
-      const projectId = this.$route.params.id
-      this.deleteDocument(projectId)
-    }
+    ...mapActions('documents', ['deleteAllDocuments'])
   }
 }
 </script>

@@ -147,29 +147,15 @@ export const actions = {
       })
   },
   deleteAllDocuments({ commit, state }, projectId) {
-    commit('setLoading', true)
-    DocumentService.getDocumentList({ projectId, limit: 1000 })
+    DocumentService.deleteAllDocuments(projectId)
       .then((response) => {
-        for (const document of response.data.results) {
-          DocumentService.deleteDocument(projectId, document.id)
-            .then((response) => {
-              // commit('deleteDocument', document.id)
-            })
-            .catch((error) => {
-              alert(error)
-            })
-        }
+        commit('setDocumentList', [])
+        commit('setTotalItems', 0)
+        commit('resetSelected')
       })
       .catch((error) => {
         alert(error)
       })
-      .finally(() => {
-        commit('setLoading', false)
-        commit('setTotalItems', 0)
-        commit('setDocumentList', [])
-        commit('resetSelected', [])
-      })
-    // TODO: Refresh documents list (issue #2)
   },
   deleteDocument({ commit, state }, projectId) {
     for (const document of state.selected) {
