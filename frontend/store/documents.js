@@ -31,7 +31,6 @@ export const getters = {
     return state.items[state.current]
   }
 }
-
 export const mutations = {
   setCurrent(state, payload) {
     state.current = payload
@@ -42,6 +41,7 @@ export const mutations = {
   addDocument(state, document) {
     state.items.unshift(document)
   },
+  // TODO: Possible Edit here
   deleteDocument(state, documentId) {
     state.items = state.items.filter(item => item.id !== documentId)
   },
@@ -146,6 +146,31 @@ export const actions = {
         alert(error)
       })
   },
+  deleteAllDocuments({ commit, state }, projectId) {
+    commit('setLoading', true)
+    DocumentService.getDocumentList({ projectId, limit: 1000 })
+      .then((response) => {
+        for (const document of response.data.results) {
+          DocumentService.deleteDocument(projectId, document.id)
+            .then((response) => {
+              // commit('deleteDocument', document.id)
+            })
+            .catch((error) => {
+              alert(error)
+            })
+        }
+      })
+      .catch((error) => {
+        alert(error)
+      })
+      .finally(() => {
+        commit('setLoading', false)
+        commit('setTotalItems', 0)
+        commit('setDocumentList', [])
+        commit('resetSelected', [])
+      })
+    // TODO: Refresh documents list (issue #2)
+  },
   deleteDocument({ commit, state }, projectId) {
     for (const document of state.selected) {
       DocumentService.deleteDocument(projectId, document.id)
@@ -157,6 +182,7 @@ export const actions = {
         })
     }
     commit('resetSelected')
+    // TODO: Refresh documents list (issue #2)
   },
   addAnnotation({ commit, state }, payload) {
     const documentId = state.items[state.current].id
