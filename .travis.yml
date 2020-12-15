@@ -46,13 +46,13 @@ deploy:
   - provider: script
     script: tools/cd.sh travis-${TRAVIS_BUILD_NUMBER}
     on:
-      repo: doccano/doccano
+      repo: prabd/doccano
       branch: master
 
   - provider: script
     script: tools/cd.sh ${TRAVIS_TAG}
     on:
-      repo: doccano/doccano
+      repo: prabd/doccano
       tags: true
 
   - provider: pages
@@ -60,5 +60,5 @@ deploy:
     github_token: $GITHUB_TOKEN
     local_dir: site
     on:
-        repo: doccano/doccano
+        repo: prabd/doccano
         branch: master
