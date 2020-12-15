@@ -41,7 +41,6 @@ export const mutations = {
   addDocument(state, document) {
     state.items.unshift(document)
   },
-  // TODO: Possible Edit here
   deleteDocument(state, documentId) {
     state.items = state.items.filter(item => item.id !== documentId)
   },
@@ -88,7 +87,6 @@ export const mutations = {
 export const actions = {
   getDocumentList({ commit, state }, payload) {
     commit('setLoading', true)
-    // payload = Object.assign(payload, state.searchOptions)
     return DocumentService.getDocumentList(payload)
       .then((response) => {
         commit('setDocumentList', response.data.results)
@@ -168,7 +166,6 @@ export const actions = {
         })
     }
     commit('resetSelected')
-    // TODO: Refresh documents list (issue #2)
   },
   addAnnotation({ commit, state }, payload) {
     const documentId = state.items[state.current].id
