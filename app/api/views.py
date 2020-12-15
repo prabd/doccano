@@ -226,6 +226,11 @@ class AnnotationList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(document_id=self.kwargs['doc_id'], user=self.request.user)
+    
+    def delete(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        queryset.all().delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @staticmethod
     def check_single_class_classification(project_id, doc_id, user):

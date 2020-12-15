@@ -66,6 +66,9 @@ export const mutations = {
   deleteAnnotation(state, annotationId) {
     state.items[state.current].annotations = state.items[state.current].annotations.filter(item => item.id !== annotationId)
   },
+  clearAnnotations(state) {
+    state.items[state.current].annotations = []
+  },
   updateAnnotation(state, payload) {
     const item = state.items[state.current].annotations.find(item => item.id === payload.id)
     Object.assign(item, payload)
@@ -192,6 +195,16 @@ export const actions = {
     AnnotationService.deleteAnnotation(payload.projectId, documentId, payload.annotationId)
       .then((response) => {
         commit('deleteAnnotation', payload.annotationId)
+      })
+      .catch((error) => {
+        alert(error)
+      })
+  },
+  clearAnnotations({ commit, state }, projectId) {
+    const documentId = state.items[state.current].id
+    AnnotationService.clearAnnotations(projectId, documentId)
+      .then((response) => {
+        commit('clearAnnotations')
       })
       .catch((error) => {
         alert(error)
